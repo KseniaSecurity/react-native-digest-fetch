@@ -72,7 +72,7 @@ export function getNextNonceCount() {
 
 export function omitNullValues(data) {
   return keys(data).reduce((result, key) => {
-    if (data[key] !== null) result[key] = data[key];
+    if (data[key] !== null || data[key] !== 'undefined') result[key] = data[key];
     return result;
   }, {});
 }
@@ -129,6 +129,32 @@ export function getDigestHeaderValue(digestChallenge, { url, method, headers, us
   }, []);
 
   return paramArray.join(',');
+}
+
+function fetchAuth(url, parameters) {
+    return fetch(url, _extends({}, parameters))
+}
+
+function getHeaders(url, parameters, initialResults) {
+    var headers = parameters.headers,
+        method = parameters.method,
+        body = parameters.body,
+        username = parameters.username,
+        password = parameters.password,
+        responseType = parameters.responseType;
+    if (initialResults && initialResults.headers && initialResults.headers.get('www-authenticate')) {
+        var digestHeader = getDigestHeaderValue(initialResults.headers.get('www-authenticate'), {
+            url: url,
+            responseType: responseType,
+            method: method,
+            headers: headers,
+            username: username,
+            password: password
+        });
+        return _extends({}, headers, {
+            Authorization: 'Digest ' + digestHeader
+        })
+    }
 }
 
 /**
