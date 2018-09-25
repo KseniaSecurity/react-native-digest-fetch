@@ -97,7 +97,7 @@ function getNextNonceCount() {
 
 function omitNullValues(data) {
     return keys(data).reduce(function (result, key) {
-        if (data[key] !== null || data[key] !== 'undefined') result[key] = data[key];
+        if (data[key] !== null) result[key] = data[key];
         return result;
     }, {});
 }
@@ -179,7 +179,7 @@ function getHeaders(url, parameters, initialResults) {
             username: username,
             password: password
         });
-        return _extends({}, header, {
+        return _extends({}, headers, {
             Authorization: 'Digest ' + digestHeader
         });
     }

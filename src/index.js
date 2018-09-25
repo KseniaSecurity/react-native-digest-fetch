@@ -72,7 +72,7 @@ export function getNextNonceCount() {
 
 export function omitNullValues(data) {
     return keys(data).reduce((result, key) => {
-        if (data[key] !== null || data[key] !== 'undefined') result[key] = data[key];
+        if (data[key] !== null) result[key] = data[key];
         return result;
     }, {});
 }
@@ -152,7 +152,7 @@ export function getHeaders(url, parameters, initialResults) {
             password: password
         });
         return {
-            ...header,
+            ...headers,
             Authorization: 'Digest ' + digestHeader
         }
     }
