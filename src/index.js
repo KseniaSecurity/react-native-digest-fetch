@@ -11,7 +11,7 @@ if (typeof global !== 'undefined' && typeof global.fetch === 'undefined') {
 
 function keys(object) {
   const result = [];
-  for(let key in object) {
+  for (let key in object) {
     if (object.hasOwnProperty(key)) {
       result.push(key);
     }
@@ -22,7 +22,7 @@ function keys(object) {
 function pick(object, whitelist) {
   const result = {};
   const keylength = whitelist.length;
-  for(let keyIndex = 0; keyIndex < keylength; keyIndex += 1) {
+  for (let keyIndex = 0; keyIndex < keylength; keyIndex += 1) {
     result[whitelist[keyIndex]] = object[whitelist[keyIndex]];
   }
   return result;
@@ -121,7 +121,7 @@ export function getDigestHeaderValue(digestChallenge, { url, method, headers, us
   });
 
   const paramArray = keys(authParams).reduce((result, key) => {
-    if (typeof(authParams[key]) !== 'function') {
+    if (typeof (authParams[key]) !== 'function') {
       result.push(`${key}=${quoteIfRelevant(authParams, key)}`);
     }
 
@@ -132,29 +132,31 @@ export function getDigestHeaderValue(digestChallenge, { url, method, headers, us
 }
 
 export function fetchAuth(url, parameters) {
-    return fetch(url, _extends({}, parameters))
+  return fetch(url, { ...parameters })
 }
 
 export function getHeaders(url, parameters, initialResults) {
-    var headers = parameters.headers,
-        method = parameters.method,
-        body = parameters.body,
-        username = parameters.username,
-        password = parameters.password,
-        responseType = parameters.responseType;
-    if (initialResults && initialResults.headers && initialResults.headers.get('www-authenticate')) {
-        var digestHeader = getDigestHeaderValue(initialResults.headers.get('www-authenticate'), {
-            url: url,
-            responseType: responseType,
-            method: method,
-            headers: headers,
-            username: username,
-            password: password
-        });
-        return _extends({}, headers, {
-            Authorization: 'Digest ' + digestHeader
-        })
+  var headers = parameters.headers,
+    method = parameters.method,
+    body = parameters.body,
+    username = parameters.username,
+    password = parameters.password,
+    responseType = parameters.responseType;
+  if (initialResults && initialResults.headers && initialResults.headers.get('www-authenticate')) {
+    var digestHeader = getDigestHeaderValue(initialResults.headers.get('www-authenticate'), {
+      url: url,
+      responseType: responseType,
+      method: method,
+      headers: headers,
+      username: username,
+      password: password
+    });
+    return {
+      ...parameters, headers: {
+        Authorization: 'Digest ' + digestHeader
+      }
     }
+  }
 }
 
 /**

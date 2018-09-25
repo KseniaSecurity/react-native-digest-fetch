@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends2 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 exports.setNextNonceCount = setNextNonceCount;
 exports.padStart = padStart;
@@ -139,7 +139,7 @@ function getDigestHeaderValue(digestChallenge, _ref) {
 
   var responseParams = [authHash.toString(_cryptoJs2.default.enc.Hex), challengeParts.nonce].concat(cnonce ? [nonce_count, cnonce] : []).concat([challengeParts.qop, pathHash.toString(_cryptoJs2.default.enc.Hex)]);
 
-  var authParams = omitNullValues(_extends2({}, pick(challengeParts, ['realm', 'nonce', 'opaque', 'qop']), {
+  var authParams = omitNullValues(_extends({}, pick(challengeParts, ['realm', 'nonce', 'opaque', 'qop']), {
     username: username,
     uri: path,
     algorithm: 'MD5',
@@ -179,8 +179,9 @@ function getHeaders(url, parameters, initialResults) {
       username: username,
       password: password
     });
-    return _extends({}, headers, {
-      Authorization: 'Digest ' + digestHeader
+    return _extends({}, parameters, { headers: {
+        Authorization: 'Digest ' + digestHeader
+      }
     });
   }
 }
@@ -197,10 +198,10 @@ function fetchWithDigest(url, parameters) {
       username = parameters.username,
       password = parameters.password;
 
-  return fetch(url, _extends2({}, parameters)).then(function (initialResults) {
+  return fetch(url, _extends({}, parameters)).then(function (initialResults) {
     if (initialResults && initialResults.headers && initialResults.headers.get('www-authenticate')) {
       var digestHeader = getDigestHeaderValue(initialResults.headers.get('www-authenticate'), { url: url, method: method, headers: headers, username: username, password: password });
-      return fetch(url, _extends2({}, parameters, { headers: _extends2({}, headers, { Authorization: 'Digest ' + digestHeader }) }));
+      return fetch(url, _extends({}, parameters, { headers: _extends({}, headers, { Authorization: 'Digest ' + digestHeader }) }));
     }
 
     return initialResults;
