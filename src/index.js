@@ -131,11 +131,11 @@ export function getDigestHeaderValue(digestChallenge, { url, method, headers, us
   return paramArray.join(',');
 }
 
-function fetchAuth(url, parameters) {
+export function fetchAuth(url, parameters) {
     return fetch(url, _extends({}, parameters))
 }
 
-function getHeaders(url, parameters, initialResults) {
+export function getHeaders(url, parameters, initialResults) {
     var headers = parameters.headers,
         method = parameters.method,
         body = parameters.body,
