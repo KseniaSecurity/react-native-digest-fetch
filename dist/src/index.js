@@ -139,7 +139,7 @@ function getDigestHeaderValue(digestChallenge, _ref) {
 
   var responseParams = [authHash.toString(_cryptoJs2.default.enc.Hex), challengeParts.nonce].concat(cnonce ? [nonce_count, cnonce] : []).concat([challengeParts.qop, pathHash.toString(_cryptoJs2.default.enc.Hex)]);
 
-  var authParams = omitNullValues(_extends({}, pick(challengeParts, ['realm', 'nonce', 'opaque', 'qop']), {
+  var authParams = omitNullValues(_extends({}, pick(challengeParts, ['realm', 'nonce', 'qop']), {
     username: username,
     uri: path,
     algorithm: 'MD5',

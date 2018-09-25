@@ -111,7 +111,7 @@ export function getDigestHeaderValue(digestChallenge, { url, method, headers, us
     .concat([challengeParts.qop, pathHash.toString(cryptojs.enc.Hex)]);
 
   const authParams = omitNullValues({
-    ...pick(challengeParts, ['realm', 'nonce', 'opaque', 'qop']),
+    ...pick(challengeParts, ['realm', 'nonce', 'qop']),
     username: username,
     uri: path,
     algorithm: 'MD5',
