@@ -1,6 +1,6 @@
 {
   "name": "react-native-digest-fetch",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Fetch which responds to digest challenges, built for react native",
   "main": "./dist/src/index.js",
   "scripts": {
