@@ -1,7 +1,7 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -28,29 +28,29 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // If the user's environment already includes fetch, we want to use it
 if (typeof window !== 'undefined' && typeof window.fetch === 'undefined') {
-  window.fetch = require('node-fetch').default;
+    window.fetch = require('node-fetch').default;
 }
 if (typeof global !== 'undefined' && typeof global.fetch === 'undefined') {
-  global.fetch = require('node-fetch').default;
+    global.fetch = require('node-fetch').default;
 }
 
 function keys(object) {
-  var result = [];
-  for (var key in object) {
-    if (object.hasOwnProperty(key)) {
-      result.push(key);
+    var result = [];
+    for (var key in object) {
+        if (object.hasOwnProperty(key)) {
+            result.push(key);
+        }
     }
-  }
-  return result;
+    return result;
 }
 
 function pick(object, whitelist) {
-  var result = {};
-  var keylength = whitelist.length;
-  for (var keyIndex = 0; keyIndex < keylength; keyIndex += 1) {
-    result[whitelist[keyIndex]] = object[whitelist[keyIndex]];
-  }
-  return result;
+    var result = {};
+    var keylength = whitelist.length;
+    for (var keyIndex = 0; keyIndex < keylength; keyIndex += 1) {
+        result[whitelist[keyIndex]] = object[whitelist[keyIndex]];
+    }
+    return result;
 }
 
 /**
@@ -58,48 +58,48 @@ function pick(object, whitelist) {
  * @param {*} digestChallenge
  */
 function getDigestChallengeParts(digestChallenge) {
-  var prefix = 'Digest ';
-  var challenge = digestChallenge.substr(digestChallenge.indexOf(prefix) + prefix.length);
-  var challengeArray = challenge.split(',');
+    var prefix = 'Digest ';
+    var challenge = digestChallenge.substr(digestChallenge.indexOf(prefix) + prefix.length);
+    var challengeArray = challenge.split(',');
 
-  return challengeArray.reduce(function (result, challengeItem) {
-    var splitPart = challengeItem.match(/^\s*?([a-zA-Z0-0]+)=("?(.*)"?|MD5|MD5-sess|token|TRUE|FALSE)\s*?$/);
+    return challengeArray.reduce(function (result, challengeItem) {
+        var splitPart = challengeItem.match(/^\s*?([a-zA-Z0-0]+)=("?(.*)"?|MD5|MD5-sess|token|TRUE|FALSE)\s*?$/);
 
-    if (splitPart.length > 2) {
-      result[splitPart[1]] = splitPart[2].replace(/\"/g, '');
-    }
+        if (splitPart.length > 2) {
+            result[splitPart[1]] = splitPart[2].replace(/\"/g, '');
+        }
 
-    return result;
-  }, {});
+        return result;
+    }, {});
 }
 
 function setNextNonceCount(nextId) {
-  getNextNonceCount.nonceCount = nextId;
+    getNextNonceCount.nonceCount = nextId;
 }
 
 function padStart(string, length, paddingCharacter) {
-  if (string.length < length) {
-    return paddingCharacter.repeat(length - string.length) + string;
-  }
-  return string;
+    if (string.length < length) {
+        return paddingCharacter.repeat(length - string.length) + string;
+    }
+    return string;
 }
 
 /**
  * Incremented nonce used in responses to server challenges
  */
 function getNextNonceCount() {
-  if (typeof getNextNonceCount.nonceCount === 'undefined') {
-    getNextNonceCount.nonceCount = 0;
-  }
-  getNextNonceCount.nonceCount = ((getNextNonceCount.nonceCount || 0) + 1) % 100000000;
-  return padStart('' + getNextNonceCount.nonceCount, 8, '0');
+    if (typeof getNextNonceCount.nonceCount === 'undefined') {
+        getNextNonceCount.nonceCount = 0;
+    }
+    getNextNonceCount.nonceCount = ((getNextNonceCount.nonceCount || 0) + 1) % 100000000;
+    return padStart('' + getNextNonceCount.nonceCount, 8, '0');
 }
 
 function omitNullValues(data) {
-  return keys(data).reduce(function (result, key) {
-    if (data[key] !== null || data[key] !== 'undefined') result[key] = data[key];
-    return result;
-  }, {});
+    return keys(data).reduce(function (result, key) {
+        if (data[key] !== null || data[key] !== 'undefined') result[key] = data[key];
+        return result;
+    }, {});
 }
 
 /**
@@ -108,7 +108,7 @@ function omitNullValues(data) {
  * @param {*} key
  */
 function quoteIfRelevant(object, key) {
-  return key === 'nc' || key === 'qop' ? '' + object[key] : '"' + object[key] + '"';
+    return key === 'nc' || key === 'qop' ? '' + object[key] : '"' + object[key] + '"';
 }
 
 /**
@@ -117,73 +117,72 @@ function quoteIfRelevant(object, key) {
  * @param {*} param1
  */
 function getDigestHeaderValue(digestChallenge, _ref) {
-  var url = _ref.url,
-      method = _ref.method,
-      headers = _ref.headers,
-      username = _ref.username,
-      password = _ref.password;
+    var url = _ref.url,
+        method = _ref.method,
+        headers = _ref.headers,
+        username = _ref.username,
+        password = _ref.password;
 
-  var parsed = _url2.default.parse(url);
-  var path = parsed.path;
-  var challengeParts = getDigestChallengeParts(digestChallenge);
+    var parsed = _url2.default.parse(url);
+    var path = parsed.path;
+    var challengeParts = getDigestChallengeParts(digestChallenge);
 
-  var authHash = _cryptoJs2.default.MD5([username, challengeParts.realm, password].join(':'));
-  var pathHash = _cryptoJs2.default.MD5([method, path].join(':'));
+    var authHash = _cryptoJs2.default.MD5([username, challengeParts.realm, password].join(':'));
+    var pathHash = _cryptoJs2.default.MD5([method, path].join(':'));
 
-  var cnonce = null;
-  var nonce_count = null;
-  if (typeof challengeParts.qop === 'string') {
-    cnonce = _cryptoJs2.default.MD5(Math.random().toString(36)).toString(_cryptoJs2.default.enc.Hex).substr(0, 8);
-    nonce_count = getNextNonceCount();
-  }
-
-  var responseParams = [authHash.toString(_cryptoJs2.default.enc.Hex), challengeParts.nonce].concat(cnonce ? [nonce_count, cnonce] : []).concat([challengeParts.qop, pathHash.toString(_cryptoJs2.default.enc.Hex)]);
-
-  var authParams = omitNullValues(_extends({}, pick(challengeParts, ['realm', 'nonce', 'qop']), {
-    username: username,
-    uri: path,
-    algorithm: 'MD5',
-    response: _cryptoJs2.default.MD5(responseParams.join(':')).toString(_cryptoJs2.default.enc.Hex),
-    nc: nonce_count,
-    cnonce: cnonce
-  }));
-
-  var paramArray = keys(authParams).reduce(function (result, key) {
-    if (typeof authParams[key] !== 'function') {
-      result.push(key + '=' + quoteIfRelevant(authParams, key));
+    var cnonce = null;
+    var nonce_count = null;
+    if (typeof challengeParts.qop === 'string') {
+        cnonce = _cryptoJs2.default.MD5(Math.random().toString(36)).toString(_cryptoJs2.default.enc.Hex).substr(0, 8);
+        nonce_count = getNextNonceCount();
     }
 
-    return result;
-  }, []);
+    var responseParams = [authHash.toString(_cryptoJs2.default.enc.Hex), challengeParts.nonce].concat(cnonce ? [nonce_count, cnonce] : []).concat([challengeParts.qop, pathHash.toString(_cryptoJs2.default.enc.Hex)]);
 
-  return paramArray.join(',');
+    var authParams = omitNullValues(_extends({}, pick(challengeParts, ['realm', 'nonce', 'qop']), {
+        username: username,
+        uri: path,
+        algorithm: 'MD5',
+        response: _cryptoJs2.default.MD5(responseParams.join(':')).toString(_cryptoJs2.default.enc.Hex),
+        nc: nonce_count,
+        cnonce: cnonce
+    }));
+
+    var paramArray = keys(authParams).reduce(function (result, key) {
+        if (typeof authParams[key] !== 'function') {
+            result.push(key + '=' + quoteIfRelevant(authParams, key));
+        }
+
+        return result;
+    }, []);
+
+    return paramArray.join(',');
 }
 
 function fetchAuth(url, parameters) {
-  return fetch(url, _extends({}, parameters));
+    return fetch(url, _extends({}, parameters));
 }
 
 function getHeaders(url, parameters, initialResults) {
-  var headers = parameters.headers,
-      method = parameters.method,
-      body = parameters.body,
-      username = parameters.username,
-      password = parameters.password,
-      responseType = parameters.responseType;
-  if (initialResults && initialResults.headers && initialResults.headers.get('www-authenticate')) {
-    var digestHeader = getDigestHeaderValue(initialResults.headers.get('www-authenticate'), {
-      url: url,
-      responseType: responseType,
-      method: method,
-      headers: headers,
-      username: username,
-      password: password
-    });
-    return _extends({}, parameters, { headers: {
-        Authorization: 'Digest ' + digestHeader
-      }
-    });
-  }
+    var headers = parameters.headers,
+        method = parameters.method,
+        body = parameters.body,
+        username = parameters.username,
+        password = parameters.password,
+        responseType = parameters.responseType;
+    if (initialResults && initialResults.headers && initialResults.headers.get('www-authenticate')) {
+        var digestHeader = getDigestHeaderValue(initialResults.headers.get('www-authenticate'), {
+            url: url,
+            responseType: responseType,
+            method: method,
+            headers: headers,
+            username: username,
+            password: password
+        });
+        return _extends({}, header, {
+            Authorization: 'Digest ' + digestHeader
+        });
+    }
 }
 
 /**
@@ -192,18 +191,24 @@ function getHeaders(url, parameters, initialResults) {
  * @param {object} parameters
  */
 function fetchWithDigest(url, parameters) {
-  var headers = parameters.headers,
-      method = parameters.method,
-      body = parameters.body,
-      username = parameters.username,
-      password = parameters.password;
+    var headers = parameters.headers,
+        method = parameters.method,
+        body = parameters.body,
+        username = parameters.username,
+        password = parameters.password;
 
-  return fetch(url, _extends({}, parameters)).then(function (initialResults) {
-    if (initialResults && initialResults.headers && initialResults.headers.get('www-authenticate')) {
-      var digestHeader = getDigestHeaderValue(initialResults.headers.get('www-authenticate'), { url: url, method: method, headers: headers, username: username, password: password });
-      return fetch(url, _extends({}, parameters, { headers: _extends({}, headers, { Authorization: 'Digest ' + digestHeader }) }));
-    }
+    return fetch(url, _extends({}, parameters)).then(function (initialResults) {
+        if (initialResults && initialResults.headers && initialResults.headers.get('www-authenticate')) {
+            var digestHeader = getDigestHeaderValue(initialResults.headers.get('www-authenticate'), {
+                url: url,
+                method: method,
+                headers: headers,
+                username: username,
+                password: password
+            });
+            return fetch(url, _extends({}, parameters, { headers: _extends({}, headers, { Authorization: 'Digest ' + digestHeader }) }));
+        }
 
-    return initialResults;
-  });
+        return initialResults;
+    });
 }
