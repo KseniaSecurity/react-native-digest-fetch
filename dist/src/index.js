@@ -12,6 +12,8 @@ exports.getNextNonceCount = getNextNonceCount;
 exports.omitNullValues = omitNullValues;
 exports.quoteIfRelevant = quoteIfRelevant;
 exports.getDigestHeaderValue = getDigestHeaderValue;
+exports.fetchAuth = fetchAuth;
+exports.getHeaders = getHeaders;
 exports.default = fetchWithDigest;
 
 var _cryptoJs = require('crypto-js');
